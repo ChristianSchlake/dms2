@@ -44,7 +44,7 @@
 	}
 
 	function generateListOrdner_leftNavigation($root_id = 0, $stufe = 0, $spaltenNameX, $nr, $selected) {
-		global $mysqli, $leftNavigation;
+		global $mysqli;
 		$abfrage="SELECT DISTINCT * FROM DMS_werteliste WHERE werteliste_vater_id = ".$root_id." AND `werteliste_metadaten_spaltenName`=\"".$spaltenNameX."\"";
 		//$einrueckung = str_repeat ("....", $stufe);
 		if ($resultat = $mysqli->query($abfrage)) {
@@ -62,7 +62,7 @@
 					echo "</li>";
 				} else {
 					echo "<form id=\"Form".$daten->werteliste_id."\" action=\"main_suche.php\" method=\"POST\" class=\"custom\">";
-							echo "<li><a href=\"#\" onclick=\"Form".$daten->werteliste_id.".submit()\">".$daten->werteliste_wert."</a></li>";
+							echo "<a href=\"#\" onclick=\"Form".$daten->werteliste_id.".submit()\">".$daten->werteliste_wert." - ".$daten->werteliste_id."</a>";
 							echo "<input type=\"hidden\" value=\"=".$daten->werteliste_id."\" name=\"".$leftNavigation."\">";
 							echo "<input type=\"hidden\" value=\"searchEntry\" name=\"eingabetyp\">";
 					echo "</form>";
@@ -70,23 +70,38 @@
 			}
 		}
 	}
-
+	
 	function generateListOrdner_rightNavigation($spaltenNameX) {
 		global $mysqli, $rightNavigation;
 		
-		$abfrage=selectDistinctAbfrageSpalte($spaltenNameX);		
+		$abfrage=selectDistinctAbfrageSpalte($spaltenNameX);
+		
+		//$abfrage="SELECT DISTINCT * FROM DMS_werteliste WHERE werteliste_vater_id = ".$root_id." AND `werteliste_metadaten_spaltenName`=\"".$spaltenNameX."\"";
+		//$einrueckung = str_repeat ("....", $stufe);
 		if ($resultat = $mysqli->query($abfrage)) {
 			while($daten = $resultat->fetch_object() ){
-				echo "<form id=\"FormRight".$daten->id."\" action=\"main_suche.php\" method=\"POST\" class=\"custom\">";
-						echo "<li><a href=\"#\" onclick=\"FormRight".$daten->id.".submit()\">".$daten->werte."</a></li>";
-						echo "<input type=\"hidden\" value=\"=".$daten->id."\" name=\"".$rightNavigation."\">";
-						echo "<input type=\"hidden\" value=\"searchEntry\" name=\"eingabetyp\">";
-				echo "</form>";
+				$nr=$nr+1;
+				$echoWert = "<option value=\"=".$daten->werteliste_id."\">".$einrueckung.$daten->werteliste_wert."</option>";
+				$kinder=Anzahl_Kinder_Werteliste($spaltenNameX, $daten->werteliste_id);
+				if($kinder > 0) {
+					echo "<li class=\"has-submenu\"><a href=\"#\">".$daten->werteliste_wert."</a>";
+						echo "<ul class=\"left-submenu\">";
+							echo "<li class=\"back\"><a href=\"#\">Back</a></li>";
+							echo "<li><label>".$daten->werteliste_wert."</label></li>";
+							generateListOrdner_leftNavigation($daten->werteliste_id, $stufe+1, $spaltenNameX, $nr+1, $selected);
+						echo "</ul>";
+					echo "</li>";
+				} else {
+					echo "<form id=\"Form".$daten->werteliste_id."\" action=\"main_suche.php\" method=\"POST\" class=\"custom\">";
+							echo "<a href=\"#\" onclick=\"Form".$daten->werteliste_id.".submit()\">".$daten->werteliste_wert." - ".$daten->werteliste_id."</a>";
+							echo "<input type=\"hidden\" value=\"=".$daten->werteliste_id."\" name=\"".$leftNavigation."\">";
+							echo "<input type=\"hidden\" value=\"searchEntry\" name=\"eingabetyp\">";
+					echo "</form>";
+				}
 			}
 		}
 	}
-
-
+	
 	function Anzahl_eintraege_Werteliste($spaltenNameX) {
 		global $mysqli;
 		/*
@@ -113,6 +128,8 @@
 		return $zahl;		
 	}	
 	
+
+
 	function selectAbfrage() {
 		global /*$abfrage,*/ $spalten, $tabellenPrefix, $spaltenAnzahlWerte;
 		
@@ -172,25 +189,24 @@
 		return $abfrage;
 	}
 	
-	function getFilenameByID($id) {
-		foreach (glob("upload/".$id.".*") as $filename) {
-	    	return $filename;
-		}
-	}
-
 	function selectDistinctAbfrageSpalte($spalteX) {
 		global $whereClause;		
 		/*
 		Select Abfrage aufbauen		
 		*/		
-		$abfrage="SELECT DISTINCT tWERTE.werteliste_wert AS werte, tWERTE.werteliste_id AS id";
+		$abfrage="SELECT DISTINCT tWERTE.werteliste_wert AS werte, tWERTE.werteliste_id as";
 
 		
 		$abfrage=$abfrage." FROM DMS_datensaetze AS tDATA
 						INNER JOIN DMS_metadaten as tMETA ON tMETA.datensaetze_id=tDATA.datensaetze_id
-						INNER JOIN DMS_werteliste as tWERTE ON tWERTE.werteliste_id=tMETA.".$spalteX." 
-						ORDER BY werte";
+						INNER JOIN DMS_werteliste as tWERTE ON tWERTE.werteliste_id=tMETA.".$spalteX;
 		$abfrage=$abfrage." ".$whereClause;
 		return $abfrage;
 	}	
+	
+	function getFilenameByID($id) {
+		foreach (glob("upload/".$id.".*") as $filename) {
+	    	return $filename;
+		}
+	}
 ?>

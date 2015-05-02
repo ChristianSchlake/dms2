@@ -4,5 +4,5 @@
 	$leftNavigation="metadaten_spalte_3"; //Werteliste für die linke navigation
 	$rightNavigation="metadaten_spalte_4"; //Werteliste für die linke navigation
 	$maxEintraegeProSite=10; // Maximale Anzahl an Einträgen die pro Seite angezeigt werden.
-	$showAlertOnResetSession=0; // einstellen ob die Alert Meldung beim reset der Session angezeigt werden soll. Mögliche Werte sind 0 oder 1
+	$showAlertOnResetSession=1; // einstellen ob die Alert Meldung beim reset der Session angezeigt werden soll. Mögliche Werte sind 0 oder 1
 ?>

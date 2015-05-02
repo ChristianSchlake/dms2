@@ -58,6 +58,8 @@
     		</aside>
 		<section class="main-section">
 				<?php
+					$asa=selectDistinctAbfrageSpalte($rightNavigation);
+					echo $asa;
 					/*
 					Tabellenüberschriften aufbauen
 					*/		
