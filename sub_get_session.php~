@@ -64,7 +64,13 @@
 	if (isset($_POST["sortierSpalte"])) {
 		$_SESSION["sortierSpalte"]=$_POST["sortierSpalte"];
 	} else {
-		$_SESSION["sortierSpalte"]="datensaetze_id";
-	}
-	$sortierSpalte=$_SESSION["sortierSpalte"];
+		$sortierSpalte="datensaetze_id";
+	}	
+	if (isset($_SESSION["sortierSpalte"])) {
+		$sortierSpalte=$_SESSION["sortierSpalte"];
+	} else {
+		$sortierSpalte="datensaetze_id";
+	};
+	
+	
 ?>

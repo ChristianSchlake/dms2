@@ -100,7 +100,7 @@
 		echo "<br><fieldset>";
 			echo "<legend>Metadaten</legend>";
 			foreach ($spalten as $key => $value) {
-				if($tabellenPrefixShort[$key]=="tMETA_") {
+				if($tabellenPrefixShort[$key]=="tMETA") {
   					echo "<div class=\"large-12 columns\">";
 						echo "<label>".$spaltenNamen[$key];
 							switch($spalten[$key]) { //Spaltentyp auswerten

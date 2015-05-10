@@ -58,89 +58,130 @@
     		</aside>
 		<section class="main-section">
 				<?php
-					$asa=selectDistinctAbfrageSpalte($rightNavigation);
-					echo $asa;
+
 					/*
 					Tabellenüberschriften aufbauen
-					*/		
-					echo"<table>";
-						echo "<thead>";
-							echo "<tr>";
-									echo "<th>ID</th>";
-									echo "<th>angelegt von</th>";
-									echo "<th>angelegt am</th>";
-									echo "<th>geändert von</th>";
-									echo "<th>geändert am</th>";
-									foreach ($spaltenNamen as $key => $value) {
-										if ($tabellenPrefix[$key]=="tMETA.") {
-											echo "<th>".$value."</th>";
-										}
-									}
-									echo "<th></th>";
-							echo "</tr>";
-						echo "</thead>";
-						echo "<tbody>";
-						/*
-						Abfrage abschicken
-						Tabellenkörper aufbauen
-						*/
-						$abfrage=selectAbfrage();									
-						$abfrage=$abfrage." ".$whereClause;
-						if ($resultat = $mysqli->query($abfrage)) {
-							$menge = mysqli_num_rows($resultat);
-							if ($menge<$startPage) {
-								$startPage=0;				
-							}
-						}
-						$abfrage=$abfrage." LIMIT ".$startPage.", ".$maxEintraegeProSite;
-//						echo $abfrage;
-						if ($resultat = $mysqli->query($abfrage)) {								
-							while($daten = $resultat->fetch_object() ){					
-								echo "<tr>";
-									echo "<td>".$daten->ID."</td>";
-									echo "<td>".$daten->AngelegtVon."</td>";
-									echo "<td>".$daten->AngelegtAm."</td>";
-									echo "<td>".$daten->geaendertVon."</td>";
-									echo "<td>".$daten->geaendertAm."</td>";
-									foreach ($spalten as $key => $value) {
-										if ($tabellenPrefix[$key]=="tMETA.") {
-											if ($spaltenAnzahlWerte[$key] > 0) {
-												/*
-												Spalten mit Wertelise
-												*/
-												$nWerte="tWERTE_".$key;
-												echo "<td>".$daten->$nWerte."</td>"; 
+					*/
+					echo "<div class=\"row\">";
+						foreach ($spaltenNamen as $key => $value) {
+							$nValue=$tabellenPrefixShort[$key].$key;
+							if ($spaltenSichtbarkeit[$nValue]==1) {
+								if (isset($spaltenBreite[$nValue])) {
+									echo "<div class=\"".$breite=$spaltenBreite[$nValue]." columns\">";
+								} else {
+									echo "<div class=\"small-12 medium-6 large-3 columns\">";
+								}
+									echo "<form action=\"main_suche.php\" method=\"POST\" class=\"custom\">";
+										if ($sortierSpalte==$key) {
+											if ($sortierung=="ASC") {
+												$value=$value."  <i class=\"fi-arrow-up\"></i>";
 											} else {
-												/*
-												Spalten ohne Wertelise
-												*/
-												echo "<td>".$daten->$key."</td>";
+												$value=$value."  <i class=\"fi-arrow-down\"></i>";												
+											}												
+											echo "<button class=\"button expand secondary tiny\" type=\"Submit\">".$value."</button>";
+										} else {												
+											echo "<button class=\"button expand tiny\" type=\"Submit\">".$value."</button>";
+										}
+										echo "<input type=\"hidden\" value=\"".$key."\" name=\"sortierSpalte\">";
+										echo "<input type=\"hidden\" value=\"ASC\" name=\"sortierung\">";
+										echo "<input type=\"hidden\" value=\"nothing\" name=\"eingabetyp\">";
+		  							echo "</form>";
+		  						echo "</div>";
+		  					}
+						}
+						echo "<HR>";
+					echo "</div>";
+
+					/*						
+					Abfrage abschicken
+					*/
+					$abfrage=selectAbfrage();									
+					$abfrage=$abfrage." ".$whereClause;
+					if ($resultat = $mysqli->query($abfrage)) {
+						$menge = mysqli_num_rows($resultat);
+						if ($menge<$startPage) {
+							$startPage=0;				
+						}
+					}
+					$abfrage=$abfrage." ORDER BY ".$tabellenPrefix[$sortierSpalte].$sortierSpalte." ".$sortierung;
+					$abfrage=$abfrage." LIMIT ".$startPage.", ".$maxEintraegeProSite;						
+//					echo $abfrage;
+
+					/*
+					Inahlt der Tabelle eintragen
+					*/
+					if ($resultat = $mysqli->query($abfrage)) {
+						while($daten = $resultat->fetch_object() ){
+							echo "<div class=\"row\">";
+								foreach ($spalten as $key => $value) {
+									$nValue=$tabellenPrefixShort[$key].$key;
+									if ($spaltenSichtbarkeit[$nValue]==1) {																		
+										if (isset($spaltenBreite[$nValue])) {
+											$breite=$spaltenBreite[$nValue];
+										} else {
+											$breite="small-12 medium-6 large-3";
+										}
+										if ($spaltenAnzahlWerte[$key] > 0) {
+											// Spalten mit Wertelise
+											$joinSpaltenName="tWERTE_".$tabellenPrefixShort[$key].$key;
+											if ($daten->$joinSpaltenName=="") {
+												echo "<div class=\"".$breite." columns\">-</div>";
+											} else {
+												echo "<div class=\"".$breite." columns\">".$daten->$joinSpaltenName."</div>";
+											}
+										} else {
+											// Spalten ohne Wertelise
+											if ($daten->$nValue=="") {
+												echo "<div class=\"".$breite." columns\">-</div>";
+											} else {
+												echo "<div class=\"".$breite." columns\">".$daten->$nValue."</div>";
 											}
 										}
 									}
-									echo "<td>";						
-										echo "<form action=\"sub_eingabemaske.php\" method=\"POST\" class=\"custom\">";
-											echo "<div class=\"row collapse\"></div>";
-												echo "<button class=\"button tiny secondary round\" type=\"Submit\"><i class=\"fi-page-edit\"></i></button>";
-												echo "<input type=\"hidden\" value=\"".$daten->ID."\" name=\"editID\">";
-												echo "<input type=\"hidden\" value=\"editEntry\" name=\"eingabetyp\">";
-				  							echo "</div>";
-				  						echo "</form>";
-				  					echo "</td>";
-				  					echo "<td>";
-										echo "<form action=\"sub_open_file_by_id.php\" method=\"POST\" class=\"custom\">";
-											echo "<div class=\"row collapse\"></div>";
-												echo "<button class=\"button tiny secondary round\" type=\"Submit\"><i class=\"fi-download\"></i></button>";
-												echo "<input type=\"hidden\" value=\"".$daten->ID."\" name=\"id\">";
-				  							echo "</div>";
-				  						echo "</form>";
-				  					echo "</td>";
-								echo "</tr>";					
-							}  
-							$resultat->close();
+								}
+								/*
+								View, Download und Delete Button
+								*/
+								if (isset($spaltenBreite["download"])) {
+									$breite=$spaltenBreite["download"];
+								} else {
+									$breite="small-12 medium-6 large-6";
+								}
+								echo "<div class=\"".$breite." columns\">";
+									echo "<form action=\"sub_eingabemaske.php\" method=\"POST\" class=\"custom\">";
+										echo "<button class=\"button tiny secondary round\" type=\"Submit\"><i class=\"fi-page-edit\"></i></button>";
+										echo "<input type=\"hidden\" value=\"".$daten->tDATA_datensaetze_id."\" name=\"editID\">";
+										echo "<input type=\"hidden\" value=\"editEntry\" name=\"eingabetyp\">";
+		  							echo "</form>";
+		  						echo "</div>";
+								if (isset($spaltenBreite["view"])) {
+									$breite=$spaltenBreite["view"];
+								} else {
+									$breite="small-12 medium-6 large-6";
+								}
+								echo "<div class=\"".$breite." columns\">";
+									echo "<form action=\"sub_open_file_by_id.php\" method=\"POST\" class=\"custom\">";
+										echo "<button class=\"button tiny secondary round\" type=\"Submit\"><i class=\"fi-download\"></i></button>";
+										echo "<input type=\"hidden\" value=\"".$daten->tDATA_datensaetze_id."\" name=\"id\">";
+		  							echo "</form>";
+		  						echo "</div>";
+								if (isset($spaltenBreite["delete"])) {
+									$breite=$spaltenBreite["delete"];
+								} else {
+									$breite="small-12 medium-6 large-6";
+								}
+								echo "<div class=\"".$breite." columns\">";
+									echo "<form action=\"del_file.php\" method=\"POST\" class=\"custom\">";
+										echo "<button class=\"button tiny secondary round\" type=\"Submit\"><i class=\"fi-x-circle\"></i></button>";
+										echo "<input type=\"hidden\" value=\"".$daten->tDATA_datensaetze_id."\" name=\"editID\">";
+										echo "<input type=\"hidden\" value=\"delEntry\" name=\"eingabetyp\">";
+		  							echo "</form>";
+		  						echo "</div>";		  						
+		  						echo "<HR>";
+		  					echo "</div>";													
 						}
-						echo "</tbody>";
-					echo "</table>";
+						$resultat->close();
+					}											
 				?>
 			</section>
 			<a class="exit-off-canvas"></a>
@@ -150,7 +191,7 @@
 		<div class="pagination-centered">
 			<ul class="pagination">		
 				<?php
-					//echo "<li class=\"arrow\"><a href=\"main_suche.php?startPage=",$startPage-$maxEintraegeProSite,"\">&laquo;</a></li>";
+					echo "<li class=\"arrow\"><a href=\"main_suche.php?startPage=",$startPage-$maxEintraegeProSite,"\">&laquo;</a></li>";
 					for ($i=0; $i < $menge; $i=$i+$maxEintraegeProSite) { 								
 						if($i>=$startPage and $i <$startPage+$maxEintraegeProSite){
 							echo "<li class=\"current\"><a href=\"main_suche.php?startPage=",$i,"\">",$i,"</a></li>";
@@ -159,7 +200,7 @@
 							echo "<li><a href=\"main_suche.php?startPage=",$i,"\">",$i,"</a></li>";
 						}
 					}
-					//echo "<li class=\"arrow\"><a href=\"main_suche.php?startPage=",$startPage+$maxEintraegeProSite,"\">&raquo;</a></li>";							
+					echo "<li class=\"arrow\"><a href=\"main_suche.php?startPage=",$startPage+$maxEintraegeProSite,"\">&raquo;</a></li>";							
 				?>
 			</ul>
 		</div>

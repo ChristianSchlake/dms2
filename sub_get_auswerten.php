@@ -1,6 +1,6 @@
 <?php
 	if (!isset($_POST["eingabetyp"])) {
-		$_POST["eingabetyp"]="searchEntry";	
+		$_POST["eingabetyp"]="searchEntry";
 	}
 	/*
 	reset Session
@@ -14,6 +14,8 @@
 	  	}
 		unset($_SESSION["suchOptionen"]);					
 		unset($_SESSION["startPage"]);
+		unset($_SESSION["sortierung"]);
+		unset($_SESSION["sortierSpalte"]);
 	};
 
 	
@@ -35,7 +37,7 @@
 	Variablen initialisieren
 	*/
 	$insertField_data="INSERT INTO `DMS_datensaetze` (`datensaetze_id`, `datensaetze_angelegt_von`,`datensaetze_geaendert_von`";
-	$insertValue_data=" VALUES (".$maxID.",1,1";
+	$insertValue_data=" VALUES (".$maxID.",180,179";
 	$insertField_meta="INSERT INTO `DMS_metadaten`(`datensaetze_id`,";
 	$insertValue_meta=" VALUES (".$maxID.",";
 	$whereClause="WHERE ";
@@ -64,6 +66,33 @@
 		  			echo "Upload fehlgeschlagen !!";
 		  			echo "<a href=\"#\" class=\"close\">&times;</a>";
 				echo "</div>";			
+			}
+		}
+	}
+
+	/*	
+	File löschen
+	*/
+	if ($_POST["eingabetyp"]=="delEntry") {
+		$editID=$_POST["editID"];		
+		$datei=getFilenameByID($editID);
+		$dateiNeu=$datei.".del";
+		if (file_exists($datei)==true) {				
+			if (rename($datei,$dateiNeu)==true) {
+				echo "<div data-alert class=\"alert-box success radius\">";
+		  			echo "Datei umbenannt in: ".$dateiNeu;
+					echo "<br>Löschen erfolgreich abgeschlossen".$dateiNeu;
+		  			echo "<a href=\"#\" class=\"close\">&times;</a>";
+				echo "</div>";
+				$abfrage="DELETE FROM `DMS_datensaetze` WHERE `datensaetze_id`=".$editID;
+				$mysqli->query($abfrage);
+				$abfrage="DELETE FROM `DMS_metadaten` WHERE `datensaetze_id`=".$editID;
+				$mysqli->query($abfrage);
+			} else {
+				echo "<div data-alert class=\"alert-box alert radius\">";
+		  			echo "konnte die Datei nicht umbenennen. Löschen abgebrochen !!";
+		  			echo "<a href=\"#\" class=\"close\">&times;</a>";
+				echo "</div>";	
 			}
 		}
 	}
