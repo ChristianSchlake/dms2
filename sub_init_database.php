@@ -1,9 +1,9 @@
 <?php
 	global $mysqli;
 
-	$serverhost="192.168.2.105";
-	$db_user="DMS_NEU";
-	$db_pass="DMS_NEU";
+	$serverhost="localhost";
+	$db_user="somebody";
+	$db_pass="eFQVMXuFfyNafJWm";
 	$db_database="DMS_NEU";
 
 	// Verbindungs-Objekt samt Zugangsdaten festlegen

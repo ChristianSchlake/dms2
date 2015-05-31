@@ -31,14 +31,14 @@
 		unset($aTMP);
 		$aTMP=array();
 		$abfrage=selectAbfrage();
-		echo "<br><br><br><br>";		
 		$abfrage=$abfrage." WHERE tDATA.datensaetze_id=".$editID;
+		echo "<br><br><br><br>";		
 		if ($resultat = $mysqli->query($abfrage)) {
 			$daten = $resultat->fetch_object();						
 			foreach ($spalten as $key => $value) {			
 				if ($spaltenAnzahlWerte[$key] > 0) {
 					// Spalten mit Wertelise
-					$joinSpaltenName="tWERTE_".$tabellenPrefixShort[$key].$key;
+                                        $joinSpaltenName=$key;
 					$aTMP[$key]=$daten->$joinSpaltenName;
 				} else {
 					// Spalten ohne Wertelise
@@ -124,7 +124,7 @@
 											}
 											$suchwert=$aTMP[$key];
 											if (substr($suchwert,0,1)=="=") {
-												$suchwert=substr($aTMP[$key],1);												
+												$suchwert=substr($aTMP[$key],1);
 											}
           								generateListOrdner(0,0,$key,$eingabetyp, $suchwert);
 										echo "</select>";

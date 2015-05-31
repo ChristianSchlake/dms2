@@ -67,6 +67,11 @@
 		  			echo "<a href=\"#\" class=\"close\">&times;</a>";
 				echo "</div>";			
 			}
+		} else {
+			echo "<div data-alert class=\"alert-box alert radius\">";
+                        	echo "Temporäre Datei ".$datei." existiert bereits";
+                                echo "<a href=\"#\" class=\"close\">&times;</a>";
+			echo "</div>";
 		}
 	}
 
