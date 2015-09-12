@@ -28,14 +28,14 @@
 				$editID=$_POST["editID"];		
 				echo "<div class=\"small-6 columns\">";
 					echo "<form action=\"main_suche.php\" method=\"POST\" class=\"custom\">";
-						echo "<button class=\"button alert expand\" type=\"Submit\">JA</i></button>";
+						echo "<button class=\"button alert expand\" type=\"Submit\">JA</button>";
 						echo "<input type=\"hidden\" value=\"".$editID."\" name=\"editID\">";
 						echo "<input type=\"hidden\" value=\"delEntry\" name=\"eingabetyp\">";
 		  			echo "</form>";
 				echo "</div>";
 				echo "<div class=\"small-6 columns\">";
 					echo "<form action=\"main_suche.php\" method=\"POST\" class=\"custom\">";
-						echo "<button class=\"button expand\" type=\"Submit\">NEIN</i></button>";
+						echo "<button class=\"button expand\" type=\"Submit\">NEIN</button>";
 						echo "<input type=\"hidden\" value=\"nothing\" name=\"eingabetyp\">";
 		  			echo "</form>";
 				echo "</div>";				

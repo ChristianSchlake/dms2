@@ -1,13 +1,19 @@
 <?php
 	include("functions.php");
 
-	$id="";
-	foreach ($_POST as $key => $value) {
-		if ($key=="id") {
-			$id=$value;
-		}
+	/*
+	Daten aus $_POST verarbeiten
+	*/
+	if (!empty($_POST)) {
+		$id=$_POST["id"];			
+	}		
+	/*
+	Daten aus $_GET verarbeiten
+	*/
+	if (!empty($_GET)) {
+		$id=$_GET["id"];			
 	}
-	echo 
+ 
 	$fileName=getFilenameByID($id);
 	header("Location: $fileName");
 	print "<script>self.close();</script>";

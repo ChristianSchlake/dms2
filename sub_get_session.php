@@ -1,4 +1,19 @@
 <?php
+/*
+	reset Session
+	*/
+	if (isset($_GET["resetSession"])) {
+		if ($showAlertOnResetSession==1) {		
+			echo "<div data-alert class=\"alert-box info radius\">";
+	  			echo "Reset Session";
+	  			echo "<button tabindex=\"0\" class=\"close\" aria-label=\"Close Alert\">&times;</button>";
+	  		echo "</div>";
+	  	}
+		session_unset();
+		unset($suchOptionen);
+		unset($aTMP);
+	};
+	
 	/*
 	Variablen initialisieren
 	*/
@@ -8,27 +23,26 @@
 	if (!isset($aTMP)) {
 		$aTMP=array();
 	}
+	
+	/*
+	Suchparameter aus POST in Session überschreiben		
+	*/
+	foreach ($_POST as $key => $value) {		
+		if ($value<>"") {
+			$suchOptionen[$key]=$value;
+			$_SESSION[$key]=$value;			
+		}		
+	}
 
 	/*
-	$aTMP aufbauen
-	*/			
-	$suchOptionen=$_SESSION["suchOptionen"];	
-	
-	//print_r($_POST);	
-	
-	if ($_POST["eingabetyp"]=="searchEntry") {
-		foreach ($_POST as $key => $value) {
+	Suchparameter aus Session lesen		
+	*/
+	foreach ($_SESSION as $key => $value) {
+		if ($value<>"") {
 			$suchOptionen[$key]=$value;
-		}
-		foreach ($suchOptionen as $key => $value) {
-			$aTMP[$key]=$value;
-		}							
-	} else {
-		foreach ($_POST as $key => $value) {
 			$aTMP[$key]=$value;
 		}
-	}
-	$_SESSION["suchOptionen"]=$suchOptionen;
+	}	
 
 	/*
 	Startpage auslesen und in die Session eintragen
@@ -64,7 +78,12 @@
 	if (isset($_POST["sortierSpalte"])) {
 		$_SESSION["sortierSpalte"]=$_POST["sortierSpalte"];
 	} else {
-		$_SESSION["sortierSpalte"]="datensaetze_id";
+		$sortierSpalte="datensaetze_id";
 	}
-	$sortierSpalte=$_SESSION["sortierSpalte"];
+	if (isset($_SESSION["sortierSpalte"])) {
+		$sortierSpalte=$_SESSION["sortierSpalte"];
+	} else {
+		$sortierSpalte="datensaetze_id";
+	}	
+
 ?>

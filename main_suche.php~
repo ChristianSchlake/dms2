@@ -3,9 +3,16 @@
 	include("conf.php");
 	include("sub_init_database.php");
 	include("functions.php");
-	get_spaltenEigenschaft();	
+	get_spaltenEigenschaft();		
+	include("sub_get_session.php");
 	include("sub_get_auswerten.php");
-	
+/*
+	echo "<br>Suchoptionen: <br>";
+	print_r($suchOptionen);
+	echo "<br>POST: <br>";
+	print_r($_POST);
+*/
+		
 	$foundationVersion="foundation551";
 	$foundationIcons="foundation-icons";
 ?>
@@ -28,6 +35,7 @@
 		include("sub_topbar.php");
 	?>
 
+		
 	<div class="off-canvas-wrap" data-offcanvas>
 		<div class="inner-wrap">
 			<nav class="tab-bar">
@@ -52,20 +60,20 @@
 				<ul class="off-canvas-list">
 					<?php
 						echo "<li><label>".$spaltenNamen[$rightNavigation]."</label></li>";
-						generateListOrdner_rightNavigation($rightNavigation);
+						generateListOrdner_rightNavigation(0,0,$rightNavigation, 0);
+						//generateListOrdner_rightNavigation($rightNavigation);
 					?>
 				</ul>
     		</aside>
-		<section class="main-section">
+		<section class="main-section">			
 				<?php
-
 					/*
 					Tabellenüberschriften aufbauen
 					*/
 					echo "<div class=\"row\">";
 						foreach ($spaltenNamen as $key => $value) {
 							$nValue=$tabellenPrefixShort[$key].$key;
-							if ($spaltenSichtbarkeit[$nValue]==1) {
+							if (isset($spaltenBreite[$nValue])) {
 								if (isset($spaltenBreite[$nValue])) {
 									echo "<div class=\"".$breite=$spaltenBreite[$nValue]." columns\">";
 								} else {
@@ -105,7 +113,7 @@
 					}
 					$abfrage=$abfrage." ORDER BY ".$tabellenPrefix[$sortierSpalte].$sortierSpalte." ".$sortierung;
 					$abfrage=$abfrage." LIMIT ".$startPage.", ".$maxEintraegeProSite;						
-//					echo $abfrage;
+					echo $abfrage;
 
 					/*
 					Inahlt der Tabelle eintragen
@@ -115,7 +123,7 @@
 							echo "<div class=\"row\">";
 								foreach ($spalten as $key => $value) {
 									$nValue=$tabellenPrefixShort[$key].$key;
-									if ($spaltenSichtbarkeit[$nValue]==1) {																		
+									if (isset($spaltenBreite[$nValue])) {																		
 										if (isset($spaltenBreite[$nValue])) {
 											$breite=$spaltenBreite[$nValue];
 										} else {
@@ -142,41 +150,45 @@
 								/*
 								View, Download und Delete Button
 								*/
+								if (isset($spaltenBreite["show"])) {
+									$breite=$spaltenBreite["show"];
+									echo "<div class=\"".$breite." columns\">";
+										echo "<form action=\"sub_eingabemaske.php\" method=\"POST\" class=\"custom\">";
+											echo "<button class=\"button tiny secondary round\" type=\"Submit\"><i class=\"fi-page\"></i></button>";
+											echo "<input type=\"hidden\" value=\"".$daten->tDATA_datensaetze_id."\" name=\"editID\">";
+											echo "<input type=\"hidden\" value=\"showEntry\" name=\"eingabetyp\">";
+			  							echo "</form>";
+			  						echo "</div>";
+								}		  						
+								if (isset($spaltenBreite["edit"])) {
+									$breite=$spaltenBreite["edit"];
+									echo "<div class=\"".$breite." columns\">";
+										echo "<form action=\"sub_eingabemaske.php\" method=\"POST\" class=\"custom\">";
+											echo "<button class=\"button tiny secondary round\" type=\"Submit\"><i class=\"fi-page-edit\"></i></button>";
+											echo "<input type=\"hidden\" value=\"".$daten->tDATA_datensaetze_id."\" name=\"editID\">";
+											echo "<input type=\"hidden\" value=\"editEntry\" name=\"eingabetyp\">";
+			  							echo "</form>";
+			  						echo "</div>";									
+								}
 								if (isset($spaltenBreite["download"])) {
 									$breite=$spaltenBreite["download"];
-								} else {
-									$breite="small-12 medium-6 large-6";
+									echo "<div class=\"".$breite." columns\">";
+										echo "<form action=\"sub_open_file_by_id.php\" method=\"POST\" class=\"custom\">";
+											echo "<button class=\"button tiny secondary round\" type=\"Submit\"><i class=\"fi-download\"></i></button>";
+											echo "<input type=\"hidden\" value=\"".$daten->tDATA_datensaetze_id."\" name=\"id\">";
+			  							echo "</form>";
+			  						echo "</div>";
 								}
-								echo "<div class=\"".$breite." columns\">";
-									echo "<form action=\"sub_eingabemaske.php\" method=\"POST\" class=\"custom\">";
-										echo "<button class=\"button tiny secondary round\" type=\"Submit\"><i class=\"fi-page-edit\"></i></button>";
-										echo "<input type=\"hidden\" value=\"".$daten->tDATA_datensaetze_id."\" name=\"editID\">";
-										echo "<input type=\"hidden\" value=\"editEntry\" name=\"eingabetyp\">";
-		  							echo "</form>";
-		  						echo "</div>";
-								if (isset($spaltenBreite["view"])) {
-									$breite=$spaltenBreite["view"];
-								} else {
-									$breite="small-12 medium-6 large-6";
-								}
-								echo "<div class=\"".$breite." columns\">";
-									echo "<form action=\"sub_open_file_by_id.php\" method=\"POST\" class=\"custom\">";
-										echo "<button class=\"button tiny secondary round\" type=\"Submit\"><i class=\"fi-download\"></i></button>";
-										echo "<input type=\"hidden\" value=\"".$daten->tDATA_datensaetze_id."\" name=\"id\">";
-		  							echo "</form>";
-		  						echo "</div>";
 								if (isset($spaltenBreite["delete"])) {
 									$breite=$spaltenBreite["delete"];
-								} else {
-									$breite="small-12 medium-6 large-6";
+									echo "<div class=\"".$breite." columns\">";
+										echo "<form action=\"del_file.php\" method=\"POST\" class=\"custom\">";
+											echo "<button class=\"button tiny secondary round\" type=\"Submit\"><i class=\"fi-x-circle\"></i></button>";
+											echo "<input type=\"hidden\" value=\"".$daten->tDATA_datensaetze_id."\" name=\"editID\">";
+											echo "<input type=\"hidden\" value=\"delEntry\" name=\"eingabetyp\">";
+		  								echo "</form>";
+		  							echo "</div>";
 								}
-								echo "<div class=\"".$breite." columns\">";
-									echo "<form action=\"del_file.php\" method=\"POST\" class=\"custom\">";
-										echo "<button class=\"button tiny secondary round\" type=\"Submit\"><i class=\"fi-x-circle\"></i></button>";
-										echo "<input type=\"hidden\" value=\"".$daten->tDATA_datensaetze_id."\" name=\"editID\">";
-										echo "<input type=\"hidden\" value=\"delEntry\" name=\"eingabetyp\">";
-		  							echo "</form>";
-		  						echo "</div>";		  						
 		  						echo "<HR>";
 		  					echo "</div>";													
 						}
@@ -205,22 +217,7 @@
 			</ul>
 		</div>
 	</div>	
-	
-	<!-- Formular "Suche" -->
-	<div id="suchModal" class="reveal-modal" data-reveal>
-		<?php
-			$eingabetyp="searchEntry";
-			include("sub_eingabemaske.php");
-		?>
-	</div>
-	
-	<!--Formular "neuer Eintrag"-->
-	<div id="eingabeModal" class="reveal-modal" data-reveal>
-		<?php
-			$eingabetyp="addEntry";
-			include("sub_eingabemaske.php");
-		?>
-	</div>
+
 
 	<?php
 		echo "<script src=\"".$foundationVersion."/js/vendor/jquery.js\"></script>";

@@ -28,7 +28,7 @@
 	function generateListOrdner($root_id = 0, $stufe = 0, $spaltenNameX, $eingabetyp, $selected) {
 		global $mysqli;
 		
-		$abfrage="SELECT DISTINCT * FROM DMS_werteliste WHERE werteliste_vater_id = ".$root_id." AND `werteliste_metadaten_spaltenName`=\"".$spaltenNameX."\"";
+		$abfrage="SELECT DISTINCT * FROM DMS_werteliste WHERE werteliste_vater_id = ".$root_id." AND `werteliste_metadaten_spaltenName`=\"".$spaltenNameX."\" ORDER BY werteliste_wert";
 		$einrueckung = str_repeat ("....", $stufe);
 		if ($resultat = $mysqli->query($abfrage)) {
 			while($daten = $resultat->fetch_object() ){
@@ -48,7 +48,7 @@
 
 	function generateListOrdner_leftNavigation($root_id = 0, $stufe = 0, $spaltenNameX, $nr, $selected) {
 		global $mysqli, $leftNavigation;
-		$abfrage="SELECT DISTINCT * FROM DMS_werteliste WHERE werteliste_vater_id = ".$root_id." AND `werteliste_metadaten_spaltenName`=\"".$spaltenNameX."\"";
+		$abfrage="SELECT DISTINCT * FROM DMS_werteliste WHERE werteliste_vater_id = ".$root_id." AND `werteliste_metadaten_spaltenName`=\"".$spaltenNameX."\" ORDER BY werteliste_wert";
 		//$einrueckung = str_repeat ("....", $stufe);
 		if ($resultat = $mysqli->query($abfrage)) {
 			while($daten = $resultat->fetch_object() ){
@@ -74,9 +74,41 @@
 		}
 	}
 
+	function generateListOrdner_List($root_id = 0, $stufe = 0, $spaltenNameX, $nr, $selected) {
+		global $mysqli, $leftNavigation;
+		$abfrage="SELECT DISTINCT * FROM DMS_werteliste WHERE werteliste_vater_id = ".$root_id." AND `werteliste_metadaten_spaltenName`=\"".$spaltenNameX."\" ORDER BY werteliste_wert";
+		$einrueckung = str_repeat ("....", $stufe);
+		if ($resultat = $mysqli->query($abfrage)) {
+			while($daten = $resultat->fetch_object() ){
+				$nr=$nr+1;
+				$anzahl=Anzahl_Dokumente_in_DMS($spaltenNameX, $daten->werteliste_id);
+				$kinder=Anzahl_Kinder_Werteliste($spaltenNameX, $daten->werteliste_id);
+				echo "<tr>";
+      			echo "<td>".$daten->werteliste_id."</td>";
+      			echo "<td>".$einrueckung.$einrueckung.$daten->werteliste_wert."</td>";
+      			echo "<td>".$anzahl."</td>";					
+					echo "<td>";
+						if ($anzahl == 0 and $kinder ==0 ) {
+							echo "<form action=\"sub_edit_list.php\" method=\"POST\" class=\"custom\">";
+								echo "<button class=\"button tiny secondary round\" type=\"Submit\"><i class=\"fi-x-circle\"></i></button>";
+								echo "<input type=\"hidden\" value=\"".$daten->werteliste_id."\" name=\"deleteID\">";
+								echo "<input type=\"hidden\" value=\"delEntryWert\" name=\"eingabetyp\">";							
+								echo "<input type=\"hidden\" value=\"".$spaltenNameX."\" name=\"Auswahllisten\">";
+							echo "</form>";
+						}
+					echo "</td>";
+    			echo "</tr>";
+				echo $echoWert;
+				if($kinder > 0) {
+					generateListOrdner_List($daten->werteliste_id, $stufe+1, $spaltenNameX, $nr+1, $selected);
+				}
+			}
+		}
+	}	
+
 	function generateListOrdner_rightNavigation($root_id = 0, $stufe = 0, $spaltenNameX, $nr, $selected) {
 		global $mysqli, $rightNavigation;
-		$abfrage="SELECT DISTINCT * FROM DMS_werteliste WHERE werteliste_vater_id = ".$root_id." AND `werteliste_metadaten_spaltenName`=\"".$spaltenNameX."\"";
+		$abfrage="SELECT DISTINCT * FROM DMS_werteliste WHERE werteliste_vater_id = ".$root_id." AND `werteliste_metadaten_spaltenName`=\"".$spaltenNameX."\" ORDER BY werteliste_wert";
 		//$einrueckung = str_repeat ("....", $stufe);
 		//echo $abfrage;
 		if ($resultat = $mysqli->query($abfrage)) {
@@ -86,7 +118,7 @@
 				$kinder=Anzahl_Kinder_Werteliste($spaltenNameX, $daten->werteliste_id);
 				if($kinder > 0) {
 					echo "<li class=\"has-submenu\"><a href=\"#\">".$daten->werteliste_wert."</a>";
-						echo "<ul class=\"left-submenu\">";
+						echo "<ul class=\"right-submenu\">";
 							echo "<li class=\"back\"><a href=\"#\">Back</a></li>";
 							echo "<li><label>".$daten->werteliste_wert."</label></li>";
 							generateListOrdner_rightNavigation($daten->werteliste_id, $stufe+1, $spaltenNameX, $nr+1, $selected);
@@ -144,6 +176,20 @@
 		}
 		return $zahl;		
 	}	
+	
+	function Anzahl_Dokumente_in_DMS($spaltenNameX, $wertX) {
+		global $mysqli;
+		/*
+		Gibt die Anzahl an Kindereinträgen für die übergebene Spalte zurück
+		*/
+		$zahl = 0;
+		$abfrage = "SELECT * FROM `DMS_metadaten` WHERE ".$spaltenNameX."=".$wertX;
+		if ($resultat = $mysqli->query($abfrage)) {
+			$zahl = mysqli_num_rows($resultat);
+		}
+		return $zahl;		
+	}		
+	
 	
 	function selectAbfrage() {
 		global /*$abfrage,*/ $spalten, $tabellenPrefix, $tabellenPrefixShort, $spaltenAnzahlWerte;

@@ -24,8 +24,25 @@
 	<div class="row">
 		<div class="small-12 columns"><h1>Datei wirklich löschen?</h1></div>
 		<?php
-			if ($_POST["eingabetyp"]=="delEntry") {
-				$editID=$_POST["editID"];		
+		
+			/*
+			Daten aus $_POST verarbeiten
+			*/
+			if (!empty($_POST)) {
+				$editID=$_POST["editID"];
+				$eingabeTyp=$_POST["eingabetyp"];			
+			}		
+			/*
+			Daten aus $_GET verarbeiten
+			*/
+			if (!empty($_GET)) {
+				$editID=$_GET["editID"];
+				$eingabeTyp=$_GET["eingabetyp"];
+			}		
+		
+		
+		
+			if ($eingabeTyp=="delEntry" AND isset($editID)) {
 				echo "<div class=\"small-6 columns\">";
 					echo "<form action=\"main_suche.php\" method=\"POST\" class=\"custom\">";
 						echo "<button class=\"button alert expand\" type=\"Submit\">JA</button>";

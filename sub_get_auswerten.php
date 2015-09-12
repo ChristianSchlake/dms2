@@ -2,27 +2,7 @@
 	if (!isset($_POST["eingabetyp"])) {
 		$_POST["eingabetyp"]="searchEntry";
 	}
-	/*
-	reset Session
-	*/
-	if (isset($_GET["resetSession"])) {
-		if ($showAlertOnResetSession==1) {		
-			echo "<div data-alert class=\"alert-box info radius\">";
-	  			echo "This is an info alert with a radius.";
-	  			echo "<a href=\"#\" class=\"close\">&times;</a>";
-	  		echo "</div>";
-	  	}
-		unset($_SESSION["suchOptionen"]);					
-		unset($_SESSION["startPage"]);
-		unset($_SESSION["sortierung"]);
-		unset($_SESSION["sortierSpalte"]);
-	};
-
-	
-	/*
-	Post bzw. suchOptionen in das Array aTMP schreiben
-	*/	
-	include("sub_get_session.php");
+		
 	/*
 	neue ID ermitteln
 	*/
@@ -105,8 +85,8 @@
 	/*
 	Eintrag suchen (WHERE ...)
 	*/
-	foreach ($_SESSION["suchOptionen"] as $key => $value) {
-		if (/*$aTMP["eingabetyp"]=="searchEntry" AND*/ $key!="eingabetyp" AND $value<>"") {			
+	foreach ($suchOptionen as $key => $value) {
+		if ($key!="eingabetyp" AND $value<>"" AND isset($spalten[$key])) {			
 			/*			
 			Suche vorbereiten
 			*/
@@ -262,5 +242,4 @@
 		$updateClause="UPDATE DMS_datensaetze SET datensaetze_geaendert_am=NOW() WHERE datensaetze_id=".$_POST["editID"];
 		$mysqli->query($updateClause);
 	}
-	unset($aTMP);
 ?>
