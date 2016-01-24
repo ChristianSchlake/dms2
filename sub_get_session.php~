@@ -6,7 +6,6 @@
 		if ($showAlertOnResetSession==1) {		
 			echo "<div data-alert class=\"alert-box info radius\">";
 	  			echo "Reset Session";
-	  			//echo "<a href=\"#\" class=\"close\">&times;</a>";
 	  			echo "<button tabindex=\"0\" class=\"close\" aria-label=\"Close Alert\">&times;</button>";
 	  		echo "</div>";
 	  	}

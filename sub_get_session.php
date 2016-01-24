@@ -64,12 +64,16 @@
 	if (!isset($_SESSION["sortierung"])) {
 		$_SESSION["sortierung"]="DESC";
 	}
-	if  ($_POST["sortierSpalte"]==$_SESSION["sortierSpalte"] AND isset($_POST["sortierung"])) {
-		if ($_SESSION["sortierung"]=="ASC") {
-			$_SESSION["sortierung"]="DESC";
-		} else {
-			$_SESSION["sortierung"]="ASC";
+	if (isset($_POST["sortierSpalte"]) AND isset($_SESSION["sortierSpalte"])) {
+		if  ($_POST["sortierSpalte"]==$_SESSION["sortierSpalte"] AND isset($_POST["sortierung"])) {
+			if ($_SESSION["sortierung"]=="ASC") {
+				$_SESSION["sortierung"]="DESC";
+			} else {
+				$_SESSION["sortierung"]="ASC";
+			}
 		}
+	} else {
+		$_SESSION["sortierung"]="ASC";
 	}
 	$sortierung=$_SESSION["sortierung"];
 	/*

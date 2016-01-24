@@ -46,21 +46,21 @@
 		}
 	}
 
-	function generateListOrdner_leftNavigation($root_id = 0, $stufe = 0, $spaltenNameX, $nr, $selected) {
+	function generateListOrdner_leftNavigation($root_id = 0, $stufe = 0, $spaltenNameX, $nr) {
 		global $mysqli, $leftNavigation;
 		$abfrage="SELECT DISTINCT * FROM DMS_werteliste WHERE werteliste_vater_id = ".$root_id." AND `werteliste_metadaten_spaltenName`=\"".$spaltenNameX."\" ORDER BY werteliste_wert";
 		//$einrueckung = str_repeat ("....", $stufe);
 		if ($resultat = $mysqli->query($abfrage)) {
 			while($daten = $resultat->fetch_object() ){
 				$nr=$nr+1;								
-				$echoWert = "<option value=\"=".$daten->werteliste_id."\">".$einrueckung.$daten->werteliste_wert."</option>";
+				$echoWert = "<option value=\"=".$daten->werteliste_id."\">".$daten->werteliste_wert."</option>";
 				$kinder=Anzahl_Kinder_Werteliste($spaltenNameX, $daten->werteliste_id);
 				if($kinder > 0) {
 					echo "<li class=\"has-submenu\"><a href=\"#\">".$daten->werteliste_wert."</a>";
 						echo "<ul class=\"left-submenu\">";
 							echo "<li class=\"back\"><a href=\"#\">Back</a></li>";
 							echo "<li><label>".$daten->werteliste_wert."</label></li>";
-							generateListOrdner_leftNavigation($daten->werteliste_id, $stufe+1, $spaltenNameX, $nr+1, $selected);
+							generateListOrdner_leftNavigation($daten->werteliste_id, $stufe+1, $spaltenNameX, $nr+1);
 						echo "</ul>";
 					echo "</li>";
 				} else {
@@ -106,7 +106,7 @@
 		}
 	}	
 
-	function generateListOrdner_rightNavigation($root_id = 0, $stufe = 0, $spaltenNameX, $nr, $selected) {
+	function generateListOrdner_rightNavigation($root_id = 0, $stufe = 0, $spaltenNameX, $nr) {
 		global $mysqli, $rightNavigation;
 		$abfrage="SELECT DISTINCT * FROM DMS_werteliste WHERE werteliste_vater_id = ".$root_id." AND `werteliste_metadaten_spaltenName`=\"".$spaltenNameX."\" ORDER BY werteliste_wert";
 		//$einrueckung = str_repeat ("....", $stufe);
@@ -114,14 +114,14 @@
 		if ($resultat = $mysqli->query($abfrage)) {
 			while($daten = $resultat->fetch_object() ){
 				$nr=$nr+1;								
-				$echoWert = "<option value=\"=".$daten->werteliste_id."\">".$einrueckung.$daten->werteliste_wert."</option>";
+				$echoWert = "<option value=\"=".$daten->werteliste_id."\">".$daten->werteliste_wert."</option>";
 				$kinder=Anzahl_Kinder_Werteliste($spaltenNameX, $daten->werteliste_id);
 				if($kinder > 0) {
 					echo "<li class=\"has-submenu\"><a href=\"#\">".$daten->werteliste_wert."</a>";
 						echo "<ul class=\"right-submenu\">";
 							echo "<li class=\"back\"><a href=\"#\">Back</a></li>";
 							echo "<li><label>".$daten->werteliste_wert."</label></li>";
-							generateListOrdner_rightNavigation($daten->werteliste_id, $stufe+1, $spaltenNameX, $nr+1, $selected);
+							generateListOrdner_rightNavigation($daten->werteliste_id, $stufe+1, $spaltenNameX, $nr+1);
 						echo "</ul>";
 					echo "</li>";
 				} else {

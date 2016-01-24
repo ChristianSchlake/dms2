@@ -51,7 +51,7 @@
 				<ul class="off-canvas-list">
 					<?php
 						echo "<li><label>".$spaltenNamen[$leftNavigation]."</label></li>";					
-						generateListOrdner_leftNavigation(0,0,$leftNavigation, 0);
+						generateListOrdner_leftNavigation(0,0,$leftNavigation, 0, "");
 					?>
 				</ul>
 			</aside>
@@ -60,7 +60,7 @@
 				<ul class="off-canvas-list">
 					<?php
 						echo "<li><label>".$spaltenNamen[$rightNavigation]."</label></li>";
-						generateListOrdner_rightNavigation(0,0,$rightNavigation, 0);
+						generateListOrdner_rightNavigation(0,0,$rightNavigation, 0), "";
 						//generateListOrdner_rightNavigation($rightNavigation);
 					?>
 				</ul>
@@ -113,7 +113,7 @@
 					}
 					$abfrage=$abfrage." ORDER BY ".$tabellenPrefix[$sortierSpalte].$sortierSpalte." ".$sortierung;
 					$abfrage=$abfrage." LIMIT ".$startPage.", ".$maxEintraegeProSite;						
-					echo $abfrage;
+//					echo $abfrage;
 
 					/*
 					Inahlt der Tabelle eintragen
