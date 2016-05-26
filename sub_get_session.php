@@ -63,7 +63,6 @@
 	sortierreihenfolge ändern
 	*/
 	if (!isset($_SESSION["sortierung"])) {
-		echo "INITIALISIERE sortierung!!!!<br>";
 		$_SESSION["sortierung"] = "DESC";
 	}
 
