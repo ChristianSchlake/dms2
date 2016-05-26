@@ -14,8 +14,8 @@
 </head>
 
 <html>
-<body>	
-	<?php
+<body>
+	<?php		
 		/*
 		Daten aus $_POST verarbeiten
 		*/
@@ -88,7 +88,7 @@
 //						echo "<label>Löschen</label>";
 					echo "</a>";						
 				echo "</div>";			
-		break;		
+			break;		
 		case ("searchEntry"):
 			include("sub_topbar.php");			
 		break;
@@ -276,6 +276,15 @@
 						}
 					}
 				echo "</fieldset>";
+				
+				//Preview
+				if($eingabetyp=="editEntry" OR $eingabetyp=="showEntry") {
+					$datei=getFilenameByID($editID);
+					echo "<br><fieldset>";
+						echo "<legend>Preview: ".basename($datei)."</legend>";					
+						echo "<iframe src = \"ViewerJS/#../".$datei."\" width='800' height='566' allowfullscreen webkitallowfullscreen></iframe>";
+					echo "</fieldset>";
+				}
 				/*
 				Butten um suchen oder Eingabe zu starten
 				*/

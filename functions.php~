@@ -74,7 +74,7 @@
 		}
 	}
 
-	function generateListOrdner_List($root_id = 0, $stufe = 0, $spaltenNameX, $nr, $selected) {
+	function generateListOrdner_List($root_id = 0, $stufe = 0, $spaltenNameX, $nr) {
 		global $mysqli, $leftNavigation;
 		$abfrage="SELECT DISTINCT * FROM DMS_werteliste WHERE werteliste_vater_id = ".$root_id." AND `werteliste_metadaten_spaltenName`=\"".$spaltenNameX."\" ORDER BY werteliste_wert";
 		$einrueckung = str_repeat ("....", $stufe);
@@ -100,7 +100,7 @@
     			echo "</tr>";
 				echo $echoWert;
 				if($kinder > 0) {
-					generateListOrdner_List($daten->werteliste_id, $stufe+1, $spaltenNameX, $nr+1, $selected);
+					generateListOrdner_List($daten->werteliste_id, $stufe+1, $spaltenNameX, $nr+1);
 				}
 			}
 		}

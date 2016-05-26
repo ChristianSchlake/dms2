@@ -104,7 +104,7 @@
 				}
 			}
 		}
-	}	
+	}
 
 	function generateListOrdner_rightNavigation($root_id = 0, $stufe = 0, $spaltenNameX, $nr) {
 		global $mysqli, $rightNavigation;
