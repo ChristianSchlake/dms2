@@ -9,7 +9,6 @@
 	  			echo "<button tabindex=\"0\" class=\"close\" aria-label=\"Close Alert\">&times;</button>";
 	  		echo "</div>";
 	  	}
-	  	echo "session löschen<br>";
 		session_unset();
 		unset($suchOptionen);
 		unset($aTMP);
@@ -64,24 +63,20 @@
 	sortierreihenfolge ändern
 	*/
 	if (!isset($_SESSION["sortierung"])) {
-		echo "INITIALISIERE sortierung!!!!<br>";
 		$_SESSION["sortierung"] = "DESC";
 	}
 
 	if (isset($_POST["sortierSpalte"]) AND isset($_SESSION["sortierSpalte"])) {
 		if  ($_POST["sortierSpalte"]==$_SESSION["sortierSpalte"] AND isset($_POST["sortierung"])) {
-			echo "ERREICHT<br>";
 			if ($_SESSION["sortierung"]=="ASC") {
-				echo "SET DESC<br>";
 				$_SESSION["sortierung"]="DESC";
 			} else {
-				echo "SET ASC<br>";
 				$_SESSION["sortierung"]="ASC";
 			}
 		}
-	} else {
+	} /*else {
 		$_SESSION["sortierung"]="ASC";
-	}
+	}*/
 	$sortierung=$_SESSION["sortierung"];
 	/*
 	zu sortierende Spalte auslesen

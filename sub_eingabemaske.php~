@@ -37,8 +37,8 @@
 		switch($eingabetyp){
 			case ("showEntry"):
 				echo "<div class=\"icon-bar five-up\">";
-					echo "<a class=\"item\" href=\"main_suche.php?resetSession=1\">";
-						echo "<i class=\"fi-home\"></i>";
+					echo "<a class=\"item\" href=\"main_suche.php\">";
+						echo "<i class=\"fi-arrow-left\"></i>";
 //						echo "<label>Home</label>";
 					echo "</a>";
 					echo "<a class=\"item\" href=\"sub_eingabemaske.php?editID=".$editID."&eingabetyp=editEntry\">";
@@ -64,8 +64,8 @@
 			break;
 		case ("editEntry"):
 				echo "<div class=\"icon-bar five-up\">";
-					echo "<a class=\"item\" href=\"main_suche.php?resetSession=1\">";
-						echo "<i class=\"fi-home\"></i>";
+					echo "<a class=\"item\" href=\"main_suche.php\">";
+						echo "<i class=\"fi-arrow-left\"></i>";
 //						echo "<label>Home</label>";
 					echo "</a>";
 					echo "<a class=\"item\" href=\"sub_eingabemaske.php?editID=".$editID."&eingabetyp=showEntry\">";

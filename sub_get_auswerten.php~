@@ -2,12 +2,6 @@
 	if (!isset($_POST["eingabetyp"])) {
 		$_POST["eingabetyp"]="searchEntry";
 	}
-
-	
-	/*
-	Post bzw. suchOptionen in das Array aTMP schreiben
-	*/	
-//	include("sub_get_session.php");	
 		
 	/*
 	neue ID ermitteln
@@ -92,7 +86,7 @@
 	Eintrag suchen (WHERE ...)
 	*/
 	foreach ($suchOptionen as $key => $value) {
-		if (/*$aTMP["eingabetyp"]=="searchEntry" AND*/ $key!="eingabetyp" AND $value<>"" AND isset($spalten[$key])) {			
+		if ($key!="eingabetyp" AND $value<>"" AND isset($spalten[$key])) {			
 			/*			
 			Suche vorbereiten
 			*/
@@ -248,5 +242,4 @@
 		$updateClause="UPDATE DMS_datensaetze SET datensaetze_geaendert_am=NOW() WHERE datensaetze_id=".$_POST["editID"];
 		$mysqli->query($updateClause);
 	}
-	unset($aTMP);	
 ?>

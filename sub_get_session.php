@@ -74,9 +74,9 @@
 				$_SESSION["sortierung"]="ASC";
 			}
 		}
-	} else {
+	} /*else {
 		$_SESSION["sortierung"]="ASC";
-	}
+	}*/
 	$sortierung=$_SESSION["sortierung"];
 	/*
 	zu sortierende Spalte auslesen
