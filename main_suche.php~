@@ -51,7 +51,7 @@
 				<ul class="off-canvas-list">
 					<?php
 						echo "<li><label>".$spaltenNamen[$leftNavigation]."</label></li>";					
-						generateListOrdner_leftNavigation(0,0,$leftNavigation, 0, "");
+						generateListOrdner_leftNavigation(0,0,$leftNavigation, 0);
 					?>
 				</ul>
 			</aside>
@@ -60,7 +60,7 @@
 				<ul class="off-canvas-list">
 					<?php
 						echo "<li><label>".$spaltenNamen[$rightNavigation]."</label></li>";
-						generateListOrdner_rightNavigation(0,0,$rightNavigation, 0), "";
+						generateListOrdner_rightNavigation(0,0,$rightNavigation, 0);
 						//generateListOrdner_rightNavigation($rightNavigation);
 					?>
 				</ul>
@@ -80,7 +80,8 @@
 									echo "<div class=\"small-12 medium-6 large-3 columns\">";
 								}
 									echo "<form action=\"main_suche.php\" method=\"POST\" class=\"custom\">";
-										if ($sortierSpalte==$key) {
+										// Prüfen ob die aktuelle spalte die jenige ist nach der aktuell sortiert wird (auch die Spalten mit Werteliste prüfen)
+										if ($sortierSpalte==$key OR $sortierSpalte=="tWERTE_".$tabellenPrefixShort[$key].$key) {
 											if ($sortierung=="ASC") {
 												$value=$value."  <i class=\"fi-arrow-up\"></i>";
 											} else {
@@ -90,8 +91,24 @@
 										} else {												
 											echo "<button class=\"button expand tiny\" type=\"Submit\">".$value."</button>";
 										}
-										echo "<input type=\"hidden\" value=\"".$key."\" name=\"sortierSpalte\">";
-										echo "<input type=\"hidden\" value=\"ASC\" name=\"sortierung\">";
+										
+
+
+
+										if($spaltenAnzahlWerte[$key]>0) {
+											/*
+											Spalte mit Werteliste
+											*/
+											$joinTabelle="tWERTE_".$tabellenPrefixShort[$key].$key;
+											echo "<input type=\"hidden\" value=\"".$joinTabelle."\" name=\"sortierSpalte\">";
+										} else {
+											/*
+											Spalte ohne Werteliste
+											*/
+											echo "<input type=\"hidden\" value=\"".$key."\" name=\"sortierSpalte\">";
+										}
+										
+										echo "<input type=\"hidden\" value=\"".$sortierung."\" name=\"sortierung\">";
 										echo "<input type=\"hidden\" value=\"nothing\" name=\"eingabetyp\">";
 		  							echo "</form>";
 		  						echo "</div>";
@@ -113,7 +130,7 @@
 					}
 					$abfrage=$abfrage." ORDER BY ".$tabellenPrefix[$sortierSpalte].$sortierSpalte." ".$sortierung;
 					$abfrage=$abfrage." LIMIT ".$startPage.", ".$maxEintraegeProSite;						
-//					echo $abfrage;
+					echo $abfrage;
 
 					/*
 					Inahlt der Tabelle eintragen

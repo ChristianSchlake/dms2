@@ -1,7 +1,7 @@
 <?php
 	global $mysqli;
 
-	$serverhost="localhost";
+	$serverhost="192.168.2.105";
 	$db_user="somebody";
 	$db_pass="eFQVMXuFfyNafJWm";
 	$db_database="DMS_NEU";

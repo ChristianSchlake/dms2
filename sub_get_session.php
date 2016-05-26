@@ -30,7 +30,7 @@
 	foreach ($_POST as $key => $value) {		
 		if ($value<>"") {
 			$suchOptionen[$key]=$value;
-			$_SESSION[$key]=$value;			
+			$_SESSION[$key] = $value;			
 		}		
 	}
 
@@ -39,6 +39,7 @@
 	*/
 	foreach ($_SESSION as $key => $value) {
 		if ($value<>"") {
+//			echo "Schleife: ".$key."-".$value."<br>";
 			$suchOptionen[$key]=$value;
 			$aTMP[$key]=$value;
 		}
@@ -62,8 +63,10 @@
 	sortierreihenfolge ändern
 	*/
 	if (!isset($_SESSION["sortierung"])) {
-		$_SESSION["sortierung"]="DESC";
+		echo "INITIALISIERE sortierung!!!!<br>";
+		$_SESSION["sortierung"] = "DESC";
 	}
+
 	if (isset($_POST["sortierSpalte"]) AND isset($_SESSION["sortierSpalte"])) {
 		if  ($_POST["sortierSpalte"]==$_SESSION["sortierSpalte"] AND isset($_POST["sortierung"])) {
 			if ($_SESSION["sortierung"]=="ASC") {
@@ -88,6 +91,5 @@
 		$sortierSpalte=$_SESSION["sortierSpalte"];
 	} else {
 		$sortierSpalte="datensaetze_id";
-	}	
-
+	}
 ?>
