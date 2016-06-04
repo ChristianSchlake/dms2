@@ -114,6 +114,14 @@
 				</table>
 			</div>
 		</fieldset>
+		<fieldset>
+		<legend>Batch Import aus dem Ordner "Scanner"</legend>
+			<?php
+				echo "<form action=\"sub_upload_batch.php\" method=\"GET\" class=\"custom\">";			
+				echo "<button class=\"button expand round\" type=\"Submit\"><i class=\"fi-upload\"></i> batch Upload starten</button>";						
+				echo "</form>";
+			?>
+		</fieldset>
 	</div>
 	<?php
 		echo "<script src=\"".$foundationVersion."/js/vendor/jquery.js\"></script>";

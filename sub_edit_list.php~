@@ -108,11 +108,19 @@
 					</thead>
 					<tbody>
 					<?php
-						generateListOrdner_List(0,0,$_POST["Auswahllisten"], 0, "");
+						generateListOrdner_List(0,0,$_POST["Auswahllisten"], 0);
 					?>
 					</tbody>
 				</table>
 			</div>
+		</fieldset>
+		<fieldset>
+		<legend>Batch Import aus dem Ordner "Scanner"</legend>
+			<?php
+				echo "<form action=\"sub_upload_batch.php\" method=\"GET\" class=\"custom\">";			
+				echo "<button class=\"button expand round\" type=\"Submit\"><i class=\"fi-page-add\"></i> Eintrag ergänzen</button>";						
+				echo "</form>";
+			?>
 		</fieldset>
 	</div>
 	<?php
