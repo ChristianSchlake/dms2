@@ -51,7 +51,7 @@
 			$path_parts=pathinfo($fileSource);
 			$datei="upload/".$maxID.".".$path_parts['extension'];
 			$erfolg=false;
-			if (($path_parts['basename']<> ".") AND ($path_parts['basename']<> "..")){
+			if (($path_parts['basename']<> ".") AND ($path_parts['basename']<> "..") AND ($path_parts['extension']<> "old")){
 				if (file_exists($datei)==false) {
 					if(copy($fileSource, $datei)==true){				
 						$erfolg=true;
@@ -62,8 +62,10 @@
 				  			echo "<a href=\"#\" class=\"close\">&times;</a>";
 				  			//echo "<br>".$insert_data."<br>".$insert_meta;
 							$mysqli->query($insert_data);
-							$mysqli->query($insert_meta);			  			
-						echo "</div>";		
+							$mysqli->query($insert_meta);
+							$fileSourceOLD=$fileSource.".old";														
+							rename($fileSource, $fileSourceOLD);
+						echo "</div>";
 					} else {
 						echo "<div data-alert class=\"alert-box alert radius\">";
 				  			echo "Upload fehlgeschlagen: ".$path_parts['basename'];
