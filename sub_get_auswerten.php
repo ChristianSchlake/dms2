@@ -26,7 +26,10 @@
 	/*	
 	File Upload ausführen
 	*/
-	if ($_POST["eingabetyp"]=="addEntry") {
+	if (isset($dokumentspalte)==false) {
+		$erfolg=true;
+	}
+	if (($_POST["eingabetyp"]=="addEntry") AND (isset($dokumentspalte))) {
 		$erfolg=false;
 		$path_parts=pathinfo($_FILES['userfile']['name']);	
 		$datei="upload/".$maxID.".".$path_parts['extension'];

@@ -278,7 +278,7 @@
 				echo "</fieldset>";
 				
 				//Preview
-				if($eingabetyp=="editEntry" OR $eingabetyp=="showEntry") {
+				if(($eingabetyp=="editEntry" OR $eingabetyp=="showEntry") AND (isset($dokumentspalte))) {
 					$datei=getFilenameByID($editID);
 					echo "<br><fieldset>";
 						echo "<legend>Preview: ".basename($datei)."</legend>";					
