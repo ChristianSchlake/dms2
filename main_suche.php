@@ -140,11 +140,11 @@
 							echo "<div class=\"row\">";
 								$link="";
 								foreach ($spalten as $key => $value) {
+									$nValue=$tabellenPrefixShort[$key].$key;
 									if ($key==$colURL) {
 										//echo "<div class=\"".$breite." columns\"><a href=\"".$link."\"></a>".$daten->$nValue."</div>";
 										$link=$daten->$nValue; 
-									}
-									$nValue=$tabellenPrefixShort[$key].$key;
+									}									
 									if (isset($spaltenBreite[$nValue])) {																												
 										$breite=$spaltenBreite[$nValue];
 										if ($spaltenAnzahlWerte[$key] > 0) {

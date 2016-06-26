@@ -140,11 +140,10 @@
 							echo "<div class=\"row\">";
 								$link="";
 								foreach ($spalten as $key => $value) {
-//									if ($key==$colURL) {
-//										// link merken
-//										$link=$colURL;
-//										echo "link: ".$link;
-//									}
+									if ($key==$colURL) {
+										//echo "<div class=\"".$breite." columns\"><a href=\"".$link."\"></a>".$daten->$nValue."</div>";
+										$link=$daten->$nValue; 
+									}
 									$nValue=$tabellenPrefixShort[$key].$key;
 									if (isset($spaltenBreite[$nValue])) {																												
 										$breite=$spaltenBreite[$nValue];
@@ -160,11 +159,7 @@
 											// Spalten ohne Wertelise
 											if ($daten->$nValue=="") {
 												echo "<div class=\"".$breite." columns\">-</div>";
-											} else {
-												if ($key==$colURL) {
-													//echo "<div class=\"".$breite." columns\"><a href=\"".$link."\"></a>".$daten->$nValue."</div>";
-													$link=$daten->$nValue; 
-												}																								
+											} else {												
 												if ($key==$colURL_Text) {																																							
 													echo "<div class=\"".$breite." columns\"><a href=\"".$link."\">".$daten->$nValue."</a></div>"; 
 												} else {
