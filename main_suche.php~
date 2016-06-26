@@ -165,9 +165,8 @@
 													//echo "<div class=\"".$breite." columns\"><a href=\"".$link."\"></a>".$daten->$nValue."</div>";
 													$link=$daten->$nValue; 
 												}																								
-												if ($key==$colURL_Text) {													
-													//echo "<div class=\"".$breite." columns\"><a href=\"".$link."\"></a>".$daten->$nValue."</div>";													
-													 echo "<div class=\"".$breite." columns\"><a href=\"".$link."\">Visit our HTML tutorial</a></div>"; 
+												if ($key==$colURL_Text) {																																							
+													echo "<div class=\"".$breite." columns\"><a href=\"".$link."\">".$daten->$nValue."</a></div>"; 
 												} else {
 													echo "<div class=\"".$breite." columns\">".$daten->$nValue."</div>";
 												}
