@@ -2,7 +2,7 @@
 	if (!isset($_POST["eingabetyp"])) {
 		$_POST["eingabetyp"]="searchEntry";
 	}
-		
+
 	/*
 	neue ID ermitteln
 	*/
@@ -224,13 +224,6 @@
 	$updateClause=rtrim($updateClause, ",");
 
 	/*
-	Neue Einträge einfügen
-	*/	
-	if ($_POST["eingabetyp"]=="addEntry" and $erfolg==true) {
-		$mysqli->query($insert_data);
-		$mysqli->query($insert_meta);
-	}
-	/*
 	Eintra ändern
 	*/	
 	if ($_POST["eingabetyp"]=="editEntry") {
@@ -244,5 +237,16 @@
 		*/
 		$updateClause="UPDATE DMS_datensaetze SET datensaetze_geaendert_am=NOW() WHERE datensaetze_id=".$_POST["editID"];
 		$mysqli->query($updateClause);
+		$_POST["eingabetyp"]="searchEntry";
 	}
+
+
+	/*
+	Neue Einträge einfügen
+	*/	
+	if ($_POST["eingabetyp"]=="addEntry" and $erfolg==true) {
+		$mysqli->query($insert_data);
+		$mysqli->query($insert_meta);
+	}
+
 ?>

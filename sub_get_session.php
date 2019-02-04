@@ -25,14 +25,19 @@
 	}
 	
 	/*
-	Suchparameter aus POST in Session überschreiben		
-	*/
-	foreach ($_POST as $key => $value) {		
-		if ($value<>"") {
-			$suchOptionen[$key]=$value;
-			$_SESSION[$key] = $value;			
-		}		
+	Suchparameter aus POST in Session überschreiben wenn es sich um eine Suche handelt
+	*/	
+	if (isset($_POST["eingabetyp"])) {
+		if ($_POST["eingabetyp"]=="searchEntry") {
+			foreach ($_POST as $key => $value) {		
+				if ($value<>"") {
+					$suchOptionen[$key]=$value;
+					$_SESSION[$key] = $value;			
+				}		
+			}			
+		}
 	}
+
 
 	/*
 	Suchparameter aus Session lesen		

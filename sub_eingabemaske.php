@@ -276,10 +276,11 @@
 						}
 					}
 				echo "</fieldset>";
-				
+
 				//Preview
 				if(($eingabetyp=="editEntry" OR $eingabetyp=="showEntry") AND (isset($dokumentspalte))) {
 					$datei=getFilenameByID($editID);
+					echo $datei;
 					echo "<br><fieldset>";
 						echo "<legend>Preview: ".basename($datei)."</legend>";					
 						echo "<iframe src = \"ViewerJS/#../".$datei."\" width='800' height='566' allowfullscreen webkitallowfullscreen></iframe>";

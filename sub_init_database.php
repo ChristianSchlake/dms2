@@ -1,10 +1,11 @@
 <?php
 	global $mysqli;
 
-	$serverhost="192.168.2.105";
-	$db_user="somebody";
-	$db_pass="eFQVMXuFfyNafJWm";
-	$db_database="DMS_bookmarks";
+        $serverhost="192.168.2.108";
+        $db_user="dms";
+        $db_pass="sxUXaLbHnPjlN69j";
+        $db_database="DMS";
+
 
 	// Verbindungs-Objekt samt Zugangsdaten festlegen
 	$mysqli = new MySQLi($serverhost,$db_user,$db_pass,$db_database);		
