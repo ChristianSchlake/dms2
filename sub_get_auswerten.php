@@ -133,6 +133,9 @@
 				case (preg_match('/char.*/', $spalten[$key]) ? true : false) :
 					$whereClause=$whereClause." ".$tabellenPrefix[$key].$key." LIKE \"%".$value."%\" AND";
 					break;
+				case (preg_match('/varchar.*/', $spalten[$key]) ? true : false) :
+					$whereClause=$whereClause." ".$tabellenPrefix[$key].$key." LIKE \"%".$value."%\" AND";
+					break;					
 				case (preg_match('/int.*/', $spalten[$key]) ? true : false) :
 					$whereClause=$whereClause." ".$tabellenPrefix[$key].$key.$value." AND";
 					break;
@@ -162,6 +165,10 @@
 							$insertField_meta=$insertField_meta."`".$key."`,"; 											
 							$insertValue_meta =$insertValue_meta."\"".$value."\",";		
 							break;
+						case (preg_match('/varchar.*/', $spalten[$key]) ? true : false) :
+							$insertField_meta=$insertField_meta."`".$key."`,"; 											
+							$insertValue_meta =$insertValue_meta."\"".$value."\",";		
+							break;							
 						case (preg_match('/int.*/', $spalten[$key]) ? true : false):
 							$insertField_meta=$insertField_meta."`".$key."`,";
 							$insertValue_meta =$insertValue_meta."".$value.",";
@@ -186,6 +193,9 @@
 							$updateClause=$updateClause.$key."=STR_TO_DATE(\"".$value."\", \"%d.%m.%Y\"),";
 							break;
 						case (preg_match('/char.*/', $spalten[$key]) ? true : false) :
+							$updateClause=$updateClause.$key."=\"".$value."\",";
+							break;
+						case (preg_match('/varchar.*/', $spalten[$key]) ? true : false) :
 							$updateClause=$updateClause.$key."=\"".$value."\",";
 							break;
 						case (preg_match('/int.*/', $spalten[$key]) ? true : false):
@@ -247,6 +257,8 @@
 	if ($_POST["eingabetyp"]=="addEntry" and $erfolg==true) {
 		$mysqli->query($insert_data);
 		$mysqli->query($insert_meta);
+		echo "<br>".$insert_data."<br>";
+		echo "<br>".$insert_meta."<br>";
 	}
 
 ?>

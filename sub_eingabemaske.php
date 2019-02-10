@@ -262,7 +262,28 @@
 				    								echo "<input type=\"text\" name=\"".$key."\"/>";
 				    							}
 				    						}
-		    								break;																		
+		    								break;
+										case (preg_match('/varchar.*/', $spalten[$key]) ? true : false) :
+											if ( $dokumentspalte==$key) {
+												/*
+												Ein Button für eine Datei
+												*/										
+				    							if ($eingabetyp=="addEntry") {
+				    								echo "<input type=\"file\" name=\"userfile\"/>";
+				    							} else {
+				    								echo "<input type=\"file\" name=\"userfile\" disabled />";
+				    							}
+											} else {																		
+												/*
+												Text als Metadaten
+												*/
+												if(isset($aTMP[$key])) {
+				    								echo "<input type=\"text\" value=\"".$aTMP[$key]."\" name=\"".$key."\"/>";
+				    							} else {
+				    								echo "<input type=\"text\" name=\"".$key."\"/>";
+				    							}
+				    						}
+		    								break;		    								
 										default:
 											if(isset($aTMP[$key])) {
 			    								echo "<input type=\"text\" value=\"".$aTMP[$key]."\" name=\"".$key."\"/>";
