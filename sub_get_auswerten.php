@@ -1,4 +1,5 @@
 <?php
+//	print_r($_POST);
 	if (!isset($_POST["eingabetyp"])) {
 		$_POST["eingabetyp"]="searchEntry";
 	}

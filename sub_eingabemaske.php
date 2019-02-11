@@ -11,11 +11,150 @@
 		echo "<link rel=\"stylesheet\" href=\"".$foundationVersion."/css/foundation.css\">";
 		echo "<link rel=\"stylesheet\" href=\"".$foundationIcons."/foundation-icons/foundation-icons.css\"/>";
 	?>
+
+<style>
+
+/*
+ * CSS3 Treeview. No JavaScript
+ * @version 1.0
+ * @author Martin Ivanov
+ * @url developer's website: http://wemakesites.net/
+ * @url developer's twitter: https://twitter.com/#!/wemakesitesnet
+ * @url developer's blog http://acidmartin.wordpress.com/
+ **/
+ 
+/*
+ * This solution works with all modern browsers and Internet Explorer 9+. 
+ * If you are interested in purchasing a JavaScript enabler for IE8 
+ * for the CSS3 Treeview, please, check this link:
+ * http://experiments.wemakesites.net/miscellaneous/acidjs-css3-treeview/
+ **/
+ 
+.css-treeview ul,
+.css-treeview li
+{
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+ 
+.css-treeview input
+{
+    position: absolute;
+    opacity: 0;
+}
+ 
+.css-treeview
+{
+    font: normal 11px "Segoe UI", Arial, Sans-serif;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+ 
+.css-treeview a
+{
+    color: #00f;
+    text-decoration: none;
+}
+ 
+.css-treeview a:hover
+{
+    text-decoration: underline;
+}
+ 
+.css-treeview input + label + ul
+{
+    margin: 0 0 0 22px;
+}
+ 
+.css-treeview input ~ ul
+{
+    display: none;
+}
+ 
+.css-treeview label,
+.css-treeview label::before
+{
+    cursor: pointer;
+}
+ 
+.css-treeview input:disabled + label
+{
+    cursor: default;
+    opacity: .6;
+}
+ 
+.css-treeview input:checked:not(:disabled) ~ ul
+{
+    display: block;
+}
+ 
+.css-treeview label,
+.css-treeview label::before
+{
+    background: url("../pages/css3-treeview/example/icons.png") no-repeat;
+}
+ 
+.css-treeview label,
+.css-treeview a,
+.css-treeview label::before
+{
+    display: inline-block;
+    height: 16px;
+    line-height: 16px;
+    vertical-align: middle;
+}
+ 
+.css-treeview label
+{
+    background-position: 18px 0;
+}
+ 
+.css-treeview label::before
+{
+    content: "";
+    width: 16px;
+    margin: 0 22px 0 0;
+    vertical-align: middle;
+    background-position: 0 -32px;
+}
+ 
+.css-treeview input:checked + label::before
+{
+    background-position: 0 -16px;
+}
+ 
+/* webkit adjacent element selector bugfix */
+
+@media screen and (-webkit-min-device-pixel-ratio:0)
+{
+    .css-treeview 
+    {
+        -webkit-animation: webkit-adjacent-element-selector-bugfix infinite 1s;
+    }
+ 
+    @-webkit-keyframes webkit-adjacent-element-selector-bugfix 
+    {
+        from 
+        { 
+            padding: 0;
+        } 
+        to 
+        { 
+            padding: 0;
+        }
+    }
+</style>	
+	
 </head>
 
 <html>
+
+
 <body>
-	<?php		
+	<?php
+				
 		/*
 		Daten aus $_POST verarbeiten
 		*/
@@ -197,10 +336,10 @@
 					echo "<legend>Metadaten</legend>";
 					foreach ($spalten as $key => $value) {
 						if($tabellenPrefixShort[$key]=="tMETA_") {
-		  					echo "<div class=\"large-12 columns\">";
-								echo "<label>".$spaltenNamen[$key];
+		  					echo "<div class=\"large-12 columns\">";								
 									switch($spalten[$key]) { //Spaltentyp auswerten
-										case "timestamp": case "date":																	
+										case "timestamp": case "date":
+											echo "<label>".$spaltenNamen[$key];																	
 											if(isset($aTMP[$key])) {										
 												echo "<input type=\"text\" value=\"".$aTMP[$key]."\" name=\"".$key."\"/>";
 											} else {
@@ -212,6 +351,7 @@
 												/*
 												Wenn eine Werteliste vorhanden ist:
 												*/
+												/*
 												echo "<select name=\"".$key."\">";
 													if (isset($aTMP[$key])==false) {
 														echo "<option selected value=\"\">ALLES</option>";												
@@ -224,10 +364,26 @@
 													}
 		          								generateListOrdner(0,0,$key,$eingabetyp, $suchwert);
 												echo "</select>";
+												*/
+												$suchwert=$aTMP[$key];
+												if (substr($suchwert,0,1)=="=") {
+													$suchwert=substr($aTMP[$key],1);
+												}
+												echo "<div class=\"css-treeview\">";
+													echo "<li><input type=\"checkbox\" id=\"x".$key."\" /><label for=\"x".$key."\">+	".$spaltenNamen[$key]."</label>";
+														echo "<ul>";
+															generateListOrdner2(0,0,$key,$eingabetyp, $suchwert);
+														echo "</ul>";
+													echo "</li>";
+												echo "</div>";												
+												echo "<input type=\"hidden\" value=\"".$suchwert."\" placeholder=\"".$key."\" id=\"".$key."\" name=\"".$key."\"/>";
+												echo "<input type=\"text\"  value=\"".get_WertByID($key,$suchwert)."\" id=\"visible".$key."\" name=\"visible".$key."\"  disabled />";
+												
 											} else {
 												/*
 												Wenn keine Werteliste vorhanden ist:
-												*/									
+												*/
+												echo "<label>".$spaltenNamen[$key];							
 												if(isset($aTMP[$key])) {
 													echo "<input type=\"text\" placeholder=\"<>0\" value=\"".$aTMP[$key]."\" name=\"".$key."\"/>";
 												} else {
@@ -236,6 +392,7 @@
 											}
 											break;									
 										case (preg_match('/decimal.*/', $spalten[$key]) ? true : false) :
+											echo "<label>".$spaltenNamen[$key];
 											if(isset($aTMP[$key])) {
 												echo "<input type=\"text\" value=\"".str_replace(".",",",$aTMP[$key])."\" name=\"".$key."\"/>";
 											} else {
@@ -243,6 +400,7 @@
 											}									
 											break;
 										case (preg_match('/char.*/', $spalten[$key]) ? true : false) :
+											echo "<label>".$spaltenNamen[$key];
 											if ( $dokumentspalte==$key) {
 												/*
 												Ein Button für eine Datei
@@ -264,6 +422,7 @@
 				    						}
 		    								break;
 										case (preg_match('/varchar.*/', $spalten[$key]) ? true : false) :
+											echo "<label>".$spaltenNamen[$key];
 											if ( $dokumentspalte==$key) {
 												/*
 												Ein Button für eine Datei
@@ -285,6 +444,7 @@
 				    						}
 		    								break;		    								
 										default:
+											echo "<label>".$spaltenNamen[$key];
 											if(isset($aTMP[$key])) {
 			    								echo "<input type=\"text\" value=\"".$aTMP[$key]."\" name=\"".$key."\"/>";
 			    							} else {
@@ -346,5 +506,37 @@
 			
 		}
 	?>
+
+<script>
+	var tree = document.querySelectorAll('ul.tree a:not(:last-child)');
+	for(var i = 0; i < tree.length; i++){
+		tree[i].addEventListener('click', function(e) {
+			var parent = e.target.parentElement;
+			var classList = parent.classList;
+			if(classList.contains("open")) {
+				classList.remove('open');
+				var opensubs = parent.querySelectorAll(':scope .open');
+				for(var i = 0; i < opensubs.length; i++){
+					opensubs[i].classList.remove('open');
+				}
+			} else {
+				classList.add('open');
+			}
+			e.preventDefault();
+		});    
+	}
+	function myFunction(element, valueID, valueXName, closeX) {
+		// Auswahl eintragen
+		document.getElementById(element).value = valueID;
+		document.getElementById("visible"+element).value = valueXName;
+
+		// Treeview wieder schließen
+		if (closeX=="True") {
+			document.getElementById("x"+element).click();	
+		}
+	}	
+</script>
+	
+	
 </body>
 </html>

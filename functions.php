@@ -24,6 +24,19 @@
 			$resultat->close();
 		};
 	}
+	
+	function get_WertByID($spaltenNameX, $ID) {
+		global $mysqli;
+
+		$abfrage="SELECT DISTINCT * FROM DMS_werteliste WHERE werteliste_id = ".$ID.";";
+
+		// Ergebnis auslesen
+		if ($resultat = $mysqli->query($abfrage)) {
+			while($daten = $resultat->fetch_object() ){
+				return $daten->werteliste_wert;
+			}
+		}
+	}
 
 	function generateListOrdner($root_id = 0, $stufe = 0, $spaltenNameX, $eingabetyp, $selected) {
 		global $mysqli;
@@ -45,6 +58,45 @@
 			}
 		}
 	}
+	
+	function generateListOrdner2($root_id = 0, $stufe = 0, $spaltenNameX, $eingabetyp, $selected) {
+		global $mysqli;
+
+		$abfrage="SELECT DISTINCT * FROM DMS_werteliste WHERE werteliste_vater_id = ".$root_id." AND `werteliste_metadaten_spaltenName`=\"".$spaltenNameX."\" ORDER BY werteliste_wert";
+		//$einrueckung = str_repeat ("....", $stufe);
+		if ($resultat = $mysqli->query($abfrage)) {			
+			while($daten = $resultat->fetch_object() ){
+				$kinder=Anzahl_Kinder_Werteliste($spaltenNameX, $daten->werteliste_id);
+				if ($eingabetyp=="searchEntry") {
+					//$echoWert = "<option value=\"=".$daten->werteliste_id."\">".$einrueckung.$daten->werteliste_wert."</option>";
+					if($kinder > 0) {
+						$echoWert = "<li><input type=\"checkbox\" onClick=\"myFunction('".$spaltenNameX."', '=".$daten->werteliste_id."', '".$daten->werteliste_wert."')\" id=\"".$daten->werteliste_id."\" /><label for=\"".$daten->werteliste_id."\">+	".$daten->werteliste_wert."</label>";
+					} else {
+ 						//$echoWert = "<li><a>".$daten->werteliste_wert."</a></li>";
+						$echoWert = "<li><input type=\"checkbox\" onClick=\"myFunction('".$spaltenNameX."', '=".$daten->werteliste_id."', '".$daten->werteliste_wert."', 'True')\" id=\"".$daten->werteliste_id."\" /><label for=\"".$daten->werteliste_id."\"> 	".$daten->werteliste_wert."</label>";
+					}
+					//$echoWert = "<li><a value=\"=".$daten->werteliste_id."\">".$daten->werteliste_wert."</a>";
+					//$echoWert = $echoWert."<button class=\"button secondary tiny\" type=\"button\" onclick=\"myFunction('".$spaltenNameX."', '=".$daten->werteliste_id."', '".$daten->werteliste_wert."')\">></button>";
+				} else {
+					//$echoWert = "<option value=\"".$daten->werteliste_id."\">".$einrueckung.$daten->werteliste_wert."</option>";
+					if($kinder > 0) {
+						$echoWert = "<li><input type=\"checkbox\" onClick=\"myFunction('".$spaltenNameX."', '=".$daten->werteliste_id."', '".$daten->werteliste_wert."')\" id=\"".$daten->werteliste_id."\" /><label for=\"".$daten->werteliste_id."\">+	".$daten->werteliste_wert."</label>";
+					} else {
+ 						//$echoWert = "<li><a>".$daten->werteliste_wert."</a></li>";
+						$echoWert = "<li><input type=\"checkbox\" onClick=\"myFunction('".$spaltenNameX."', '".$daten->werteliste_id."', '".$daten->werteliste_wert."', 'True')\" id=\"".$daten->werteliste_id."\" /><label for=\"".$daten->werteliste_id."\"> 	".$daten->werteliste_wert."</label>";
+					}				
+				}
+				if ($selected==$daten->werteliste_id) {
+					//echoWert = str_replace("<option value=", "<option selected value=", $echoWert);
+				}				
+				echo $echoWert;
+				echo "<ul>";
+					generateListOrdner2($daten->werteliste_id, $stufe+1, $spaltenNameX, $eingabetyp, $selected);
+				echo "</ul>";
+				echo "</li>";
+			}
+		}
+	}	
 
 	function generateListOrdner_leftNavigation($root_id = 0, $stufe = 0, $spaltenNameX, $nr) {
 		global $mysqli, $leftNavigation;
