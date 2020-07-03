@@ -458,15 +458,6 @@
 					}
 				echo "</fieldset>";
 
-				//Preview
-				if(($eingabetyp=="editEntry" OR $eingabetyp=="showEntry") AND (isset($dokumentspalte))) {
-					$datei=getFilenameByID($editID);
-					echo $datei;
-					echo "<br><fieldset>";
-						echo "<legend>Preview: ".basename($datei)."</legend>";					
-						echo "<iframe src = \"ViewerJS/#../".$datei."\" width='800' height='566' allowfullscreen webkitallowfullscreen></iframe>";
-					echo "</fieldset>";
-				}
 				/*
 				Butten um suchen oder Eingabe zu starten
 				*/
@@ -483,6 +474,22 @@
 						echo "<input type=\"hidden\" value=\"".$editID."\" name=\"editID\">";
 						break;
 				}
+
+                            	//Preview
+                                if(($eingabetyp=="editEntry" OR $eingabetyp=="showEntry") AND (isset($dokumentspalte))) {
+                                        $datei=getFilenameByID($editID);
+                                        $tempFile="cache/downloadFile.".pathinfo($datei, PATHINFO_EXTENSION);
+                                        echo "<br><fieldset>"; 
+                                                /*echo "<legend>Preview: ".basename($datei)."</legend>";*/
+                                                echo "<legend>Preview:</legend>";
+                                                copy($datei,$tempFile);
+						echo "<embed src= \"".$tempFile."\" width= \"900\" height= \"700\">";
+                                                /*echo "<iframe src = \"ViewerJS/#../".$tempFile."\" width='950' height='700' allowfullscreen webkitallowfullscreen></iframe>";*/
+
+                                        echo "</fieldset>";
+                                }
+
+
 				
 				echo "<input type=\"hidden\" value=\"".$eingabetyp."\" name=\"eingabetyp\">";
 				unset($aTMP);
